@@ -19,19 +19,25 @@ namespace csharp {
         public const string Sulfuras = "Sulfuras, Hand of Ragnaros";
 
         [Test]
-        public void DegradesTwiceAsFast_Once_OutOfDate() {
+        public void DegradesEachDay() {
             var item = new Item {Name = "foo", SellIn = InitialSellIn, Quality = InitialHighQuality};
             IList<Item> Items = new List<Item> {item};
             var app = new GildedRose(Items);
             for (var i = 1; i <= 10; i++) {
                 app.UpdateQuality();
-                Assert.AreEqual(InitialHighQuality - i, item.Quality);
             }
-
+            Assert.AreEqual(InitialHighQuality - 10, item.Quality);
+        }
+        
+        [Test]
+        public void DegradesTwiceAsFast_Once_OutOfDate() {
+            var item = new Item {Name = "foo", SellIn = 0, Quality = InitialHighQuality};
+            IList<Item> Items = new List<Item> {item};
+            var app = new GildedRose(Items);
             for (var i = 1; i <= 10; i++) {
                 app.UpdateQuality();
-                Assert.AreEqual(InitialHighQuality - 10 - 2 * i, item.Quality);
             }
+            Assert.AreEqual(InitialHighQuality - 20, item.Quality);
         }
 
         [Test]
@@ -41,13 +47,12 @@ namespace csharp {
             var app = new GildedRose(Items);
             for (var i = 1; i <= 10; i++) {
                 app.UpdateQuality();
-                Assert.AreEqual(InitialHighQuality - 2 * i, item.Quality);
             }
-
+            Assert.AreEqual(InitialHighQuality - 20, item.Quality);
             for (var i = 1; i <= 5; i++) {
                 app.UpdateQuality();
-                Assert.AreEqual(InitialHighQuality - 20 - 4 * i, item.Quality);
             }
+            Assert.AreEqual(InitialHighQuality - 40, item.Quality);
         }
 
         [Test]
@@ -71,19 +76,20 @@ namespace csharp {
 
         [Test]
         public void SellByDecrementsEachDay() {
-            var item1 = new Item {Name = "foo", SellIn = 10, Quality = 10};
-            var item2 = new Item {Name = BackstagePass, SellIn = 10, Quality = 10};
-            var item3 = new Item {Name = Brie, SellIn = 10, Quality = 10};
-            var item4 = new Item {Name = "Conjured foo", SellIn = 10, Quality = 10};
+            var item1 = new Item {Name = "foo", SellIn = InitialSellIn, Quality = InitialLowQuality};
+            var item2 = new Item {Name = BackstagePass, SellIn = InitialSellIn, Quality = InitialLowQuality};
+            var item3 = new Item {Name = Brie, SellIn = InitialSellIn, Quality = InitialLowQuality};
+            var item4 = new Item {Name = "Conjured foo", SellIn = InitialSellIn, Quality = InitialLowQuality};
             IList<Item> Items = new List<Item> {item1, item2, item3, item4};
             var app = new GildedRose(Items);
-            for (var i = 1; i <= 50; i++) {
+            var steps = 30;
+            for (var i = 1; i <= steps; i++) {
                 app.UpdateQuality();
             }
-
-            foreach (var item in Items) {
-                Assert.AreEqual(-40, item.SellIn);
-            }
+            Assert.AreEqual(InitialSellIn-steps, item1.SellIn);
+            Assert.AreEqual(InitialSellIn-steps, item2.SellIn);
+            Assert.AreEqual(InitialSellIn-steps, item3.SellIn);
+            Assert.AreEqual(InitialSellIn-steps, item4.SellIn);
         }
 
         [Test]
@@ -93,13 +99,13 @@ namespace csharp {
             var app = new GildedRose(Items);
             for (var i = 1; i <= 10; i++) {
                 app.UpdateQuality();
-                Assert.AreEqual(InitialLowQuality + i, item.Quality);
             }
+            Assert.AreEqual(InitialLowQuality + 10, item.Quality);
 
             for (var i = 1; i <= 10; i++) {
                 app.UpdateQuality();
-                Assert.AreEqual(InitialLowQuality + 10 + 2 * i, item.Quality);
             }
+            Assert.AreEqual(InitialLowQuality + 30, item.Quality);
         }
 
         [Test]
