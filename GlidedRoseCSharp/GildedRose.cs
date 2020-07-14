@@ -25,18 +25,21 @@ namespace csharp {
                         if (item.SellIn < 6) {
                             item.Quality++;
                         }
-
                         break;
                     }
-                    case "Sulfuras, Hand of Ragnaros":
-                        break;
+                    case "Sulfuras, Hand of Ragnaros": {
+                        continue;
+                    }
                     default: {
                         item.Quality--;
+                        if (item.Name.Contains("Conjured")) {
+                            item.Quality--;
+                        }
                         break;
                     }
                 }
-
-                if (item.SellIn <= 0) {
+                item.SellIn--;
+                if (item.SellIn < 0) {
                     switch (item.Name) {
                         case "Aged Brie": {
                             item.Quality++;
@@ -46,20 +49,16 @@ namespace csharp {
                             item.Quality = 0;
                             break;
                         }
-                        case "Sulfuras, Hand of Ragnaros": {
-                            break;
-                        }
                         default: {
                             item.Quality--;
+                            if (item.Name.Contains("Conjured")) {
+                                item.Quality--;
+                            }
                             break;
                         }
                     }
                 }
-
-                if (item.Name != "Sulfuras, Hand of Ragnaros") {
-                    item.Quality = Math.Max(Math.Min(item.Quality, 50), 0);
-                    item.SellIn--;
-                }
+                item.Quality = Math.Max(Math.Min(item.Quality, 50), 0);
             }
         }
     }
