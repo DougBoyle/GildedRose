@@ -17,15 +17,9 @@ namespace csharp {
                         break;
                     }
                     case "Backstage passes to a TAFKAL80ETC concert": {
-                        item.Quality++;
-                        if (item.SellIn < 11) {
-                            item.Quality++;
-                        }
-
-                        if (item.SellIn < 6) {
-                            item.Quality++;
-                        }
-
+                        item.Quality += item.SellIn < 6 ? 3
+                            : item.SellIn < 11 ? 2
+                            : 1;
                         break;
                     }
                     case "Sulfuras, Hand of Ragnaros":
