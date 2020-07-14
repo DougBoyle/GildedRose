@@ -55,7 +55,8 @@ namespace csharp {
             var item2 = new Item
                 {Name = BackstagePass, SellIn = 0, Quality = 0};
             var item3 = new Item {Name = Brie, SellIn = 0, Quality = 0};
-            IList<Item> Items = new List<Item> {item, item2, item3};
+            var item4 = new Item {Name = "Conjured foo", SellIn = 0, Quality = 0};
+            IList<Item> Items = new List<Item> { item, item2, item3, item4 };
             GildedRose app = new GildedRose(Items);
             for (int i = 1; i <= 10; i++) {
                 app.UpdateQuality();
@@ -63,18 +64,23 @@ namespace csharp {
             Assert.GreaterOrEqual(item.Quality, 0);
             Assert.GreaterOrEqual(item2.Quality, 0);
             Assert.GreaterOrEqual(item3.Quality, 0);
+            Assert.GreaterOrEqual(item4.Quality, 0);
         }
 
         [Test]
         public void SellByDecrementsEachDay() {
-            var item = new Item {Name = "foo", SellIn = InitialSellIn, Quality = InitialHighQuality};
-            IList<Item> Items = new List<Item> {item};
+            var item1 = new Item {Name = "foo", SellIn = 10, Quality = 10};
+            var item2 = new Item {Name = BackstagePass, SellIn = 10, Quality = 10};
+            var item3 = new Item {Name = Brie, SellIn = 10, Quality = 10};
+            var item4 = new Item {Name = "Conjured foo", SellIn = 10, Quality = 10};
+            IList<Item> Items = new List<Item> { item1, item2, item3, item4 };
             GildedRose app = new GildedRose(Items);
             for (int i = 1; i <= 50; i++) {
                 app.UpdateQuality();
             }
-
-            Assert.AreEqual(-40, item.SellIn);
+            foreach (var item in Items) {
+                Assert.AreEqual(-40, item.SellIn);
+            }
         }
 
         [Test]
